@@ -1,29 +1,63 @@
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
     meter_meter = 1
-    arrow_meter_2 = sprites.create(img`
-        . . . 5 5 5 . . . 
-        . . . 5 5 5 . . . 
-        . . . 5 5 5 . . . 
-        . . . 5 5 5 . . . 
-        . . . 5 5 5 . . . 
-        . . . 5 5 5 . . . 
-        . . . 5 5 5 . . . 
-        . . . 5 5 5 . . . 
-        . . . 5 5 5 . . . 
-        5 5 5 5 5 5 5 5 5 
-        . 5 5 5 5 5 5 5 . 
-        . . 5 5 5 5 5 . . 
-        . . . 5 5 5 . . . 
-        . . . . 5 . . . . 
-        `, SpriteKind.Player)
-    arrow_meter_2.setPosition(arrow_meter.x, arrow_meter.y)
-    sprites.destroy(arrow_meter)
-    pause(2000)
-    meter_meter = 0
+    if (arrow_meter) {
+        arrow_meter_2 = sprites.create(img`
+            . . . 5 5 5 . . . 
+            . . . 5 5 5 . . . 
+            . . . 5 5 5 . . . 
+            . . . 5 5 5 . . . 
+            . . . 5 5 5 . . . 
+            . . . 5 5 5 . . . 
+            . . . 5 5 5 . . . 
+            . . . 5 5 5 . . . 
+            . . . 5 5 5 . . . 
+            5 5 5 5 5 5 5 5 5 
+            . 5 5 5 5 5 5 5 . 
+            . . 5 5 5 5 5 . . 
+            . . . 5 5 5 . . . 
+            . . . . 5 . . . . 
+            `, SpriteKind.Player)
+        arrow_meter_2.setPosition(arrow_meter.x, arrow_meter.y)
+        sprites.destroy(arrow_meter)
+        if (arrow_meter_2.x >= 65 && arrow_meter_2.x <= 88) {
+            info.changeScoreBy(1)
+        } else {
+            info.changeLifeBy(-1)
+        }
+        pause(2000)
+        meter_meter = 0
+    } else {
+        arrow_meter = sprites.create(img`
+            . . . 5 5 5 . . . 
+            . . . 5 5 5 . . . 
+            . . . 5 5 5 . . . 
+            . . . 5 5 5 . . . 
+            . . . 5 5 5 . . . 
+            . . . 5 5 5 . . . 
+            . . . 5 5 5 . . . 
+            . . . 5 5 5 . . . 
+            . . . 5 5 5 . . . 
+            5 5 5 5 5 5 5 5 5 
+            . 5 5 5 5 5 5 5 . 
+            . . 5 5 5 5 5 . . 
+            . . . 5 5 5 . . . 
+            . . . . 5 . . . . 
+            `, SpriteKind.Player)
+        arrow_meter.setPosition(arrow_meter_2.x, arrow_meter_2.y)
+        sprites.destroy(arrow_meter_2)
+        if (arrow_meter.x >= 65 && arrow_meter.x <= 88) {
+            info.changeScoreBy(1)
+        } else {
+            info.changeLifeBy(-1)
+        }
+        pause(2000)
+        meter_meter = 0
+    }
 })
 let arrow_meter_2: Sprite = null
 let arrow_meter: Sprite = null
 let meter_meter = 0
+info.setLife(3)
 meter_meter = 1
 scene.setBackgroundImage(img`
     eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeefffeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeefffeeeeeeeefffeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeefffeeeeeee
@@ -206,12 +240,15 @@ arrow_meter.setVelocity(100, 0)
 pause(750)
 meter_meter = 0
 forever(function () {
-    if (meter_meter == 0) {
+    if (meter_meter == 0 && arrow_meter) {
         arrow_meter.setVelocity(-100, 0)
         pause(1500)
         arrow_meter.setVelocity(100, 0)
         pause(1500)
     } else {
-    	
+        arrow_meter_2.setVelocity(-100, 0)
+        pause(1500)
+        arrow_meter_2.setVelocity(100, 0)
+        pause(1500)
     }
 })
