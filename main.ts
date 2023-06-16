@@ -1,59 +1,82 @@
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
-    meter_meter = 1
-    if (arrow_meter) {
-        arrow_meter_2 = sprites.create(img`
-            . . . 5 5 5 . . . 
-            . . . 5 5 5 . . . 
-            . . . 5 5 5 . . . 
-            . . . 5 5 5 . . . 
-            . . . 5 5 5 . . . 
-            . . . 5 5 5 . . . 
-            . . . 5 5 5 . . . 
-            . . . 5 5 5 . . . 
-            . . . 5 5 5 . . . 
-            5 5 5 5 5 5 5 5 5 
-            . 5 5 5 5 5 5 5 . 
-            . . 5 5 5 5 5 . . 
-            . . . 5 5 5 . . . 
-            . . . . 5 . . . . 
-            `, SpriteKind.Player)
-        arrow_meter_2.setPosition(arrow_meter.x, arrow_meter.y)
-        sprites.destroy(arrow_meter)
-        if (arrow_meter_2.x >= 65 && arrow_meter_2.x <= 88) {
-            info.changeScoreBy(1)
+    if (do_a_pressed == 0) {
+        meter_meter = 1
+        if (arrow_meter) {
+            if (arrow_meter.x >= 65 && arrow_meter.x <= 88) {
+                info.changeScoreBy(1)
+            } else {
+                info.changeLifeBy(-1)
+            }
+            arrow_meter_2 = sprites.create(img`
+                . . . 5 5 5 . . . 
+                . . . 5 5 5 . . . 
+                . . . 5 5 5 . . . 
+                . . . 5 5 5 . . . 
+                . . . 5 5 5 . . . 
+                . . . 5 5 5 . . . 
+                . . . 5 5 5 . . . 
+                . . . 5 5 5 . . . 
+                . . . 5 5 5 . . . 
+                5 5 5 5 5 5 5 5 5 
+                . 5 5 5 5 5 5 5 . 
+                . . 5 5 5 5 5 . . 
+                . . . 5 5 5 . . . 
+                . . . . 5 . . . . 
+                `, SpriteKind.Player)
+            arrow_meter_2.setPosition(80, 95)
+            sprites.destroy(arrow_meter)
+            pause(2000)
+            arrow_meter_2.setVelocity(100, 0)
+            pause(750)
+            while (meter_meter == 0) {
+                if (meter_meter == 0 && (arrow_meter || arrow_meter_2)) {
+                    arrow_meter.setVelocity(-100, 0)
+                    pause(1500)
+                    arrow_meter.setVelocity(100, 0)
+                    pause(1500)
+                } else {
+                    arrow_meter_2.setVelocity(-100, 0)
+                    pause(1500)
+                    arrow_meter_2.setVelocity(100, 0)
+                    pause(1500)
+                }
+            }
+            meter_meter = 0
+            do_a_pressed = 0
+        } else if (arrow_meter_2) {
+            arrow_meter = sprites.create(img`
+                . . . 5 5 5 . . . 
+                . . . 5 5 5 . . . 
+                . . . 5 5 5 . . . 
+                . . . 5 5 5 . . . 
+                . . . 5 5 5 . . . 
+                . . . 5 5 5 . . . 
+                . . . 5 5 5 . . . 
+                . . . 5 5 5 . . . 
+                . . . 5 5 5 . . . 
+                5 5 5 5 5 5 5 5 5 
+                . 5 5 5 5 5 5 5 . 
+                . . 5 5 5 5 5 . . 
+                . . . 5 5 5 . . . 
+                . . . . 5 . . . . 
+                `, SpriteKind.Player)
+            if (arrow_meter.x >= 65 && arrow_meter.x <= 88) {
+                info.changeScoreBy(1)
+            } else {
+                info.changeLifeBy(-1)
+            }
+            arrow_meter.setPosition(80, 95)
+            sprites.destroy(arrow_meter_2)
+            pause(2000)
+            meter_meter = 0
+            do_a_pressed = 0
         } else {
-            info.changeLifeBy(-1)
+            meter_meter = 0
+            do_a_pressed = 0
         }
-        pause(2000)
-        meter_meter = 0
-    } else {
-        arrow_meter = sprites.create(img`
-            . . . 5 5 5 . . . 
-            . . . 5 5 5 . . . 
-            . . . 5 5 5 . . . 
-            . . . 5 5 5 . . . 
-            . . . 5 5 5 . . . 
-            . . . 5 5 5 . . . 
-            . . . 5 5 5 . . . 
-            . . . 5 5 5 . . . 
-            . . . 5 5 5 . . . 
-            5 5 5 5 5 5 5 5 5 
-            . 5 5 5 5 5 5 5 . 
-            . . 5 5 5 5 5 . . 
-            . . . 5 5 5 . . . 
-            . . . . 5 . . . . 
-            `, SpriteKind.Player)
-        arrow_meter.setPosition(arrow_meter_2.x, arrow_meter_2.y)
-        sprites.destroy(arrow_meter_2)
-        if (arrow_meter.x >= 65 && arrow_meter.x <= 88) {
-            info.changeScoreBy(1)
-        } else {
-            info.changeLifeBy(-1)
-        }
-        pause(2000)
-        meter_meter = 0
     }
 })
+let do_a_pressed = 0
 let arrow_meter_2: Sprite = null
 let arrow_meter: Sprite = null
 let meter_meter = 0
@@ -239,8 +262,8 @@ papa.setScale(4, ScaleAnchor.BottomRight)
 arrow_meter.setVelocity(100, 0)
 pause(750)
 meter_meter = 0
-forever(function () {
-    if (meter_meter == 0 && arrow_meter) {
+while (!(controller.A.isPressed())) {
+    if (meter_meter == 0 && (arrow_meter || arrow_meter_2)) {
         arrow_meter.setVelocity(-100, 0)
         pause(1500)
         arrow_meter.setVelocity(100, 0)
@@ -251,4 +274,7 @@ forever(function () {
         arrow_meter_2.setVelocity(100, 0)
         pause(1500)
     }
+}
+forever(function () {
+	
 })
